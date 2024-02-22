@@ -1,0 +1,24 @@
+# General
+gradlew
+gradlew.
+gradle
+.gradle/
+/build
+/target
+/.idea
+/.vscode
+/out
+/logs
+/node_modules
+
+
+# IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+.idea
+
+
+# Maven
+/log
+/target
