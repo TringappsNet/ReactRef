@@ -10,7 +10,7 @@ import readXlsxFile from 'read-excel-file';
 
 function Form() {
   const dispatch = useDispatch();
-  const [excelFile, setExcelFile] = useState(null);
+  // const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [retrievedData, setRetrievedData] = useState(null);
 
@@ -102,7 +102,7 @@ let reader = new FileReader();
 reader.readAsArrayBuffer(selectedFile);
 
 reader.onload = async (e) => {
-  setExcelFile(e.target.result);
+  setExcelData(e.target.result);
 
   const workbook = await readXlsxFile(e.target.result);
   const data = workbook.slice(0, 10);
@@ -150,7 +150,7 @@ dispatch(addExcelData(jsonArray));
       }
     } else {
       setTypeError('Please select only CSV or Excel file types');
-      setExcelFile(null);
+      setExcelData(null);
     }
   } else {
     console.log('Please select your file');
