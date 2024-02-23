@@ -10,7 +10,6 @@ import readXlsxFile from 'read-excel-file';
 
 function Form() {
   const dispatch = useDispatch();
-  // const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [retrievedData, setRetrievedData] = useState(null);
 
