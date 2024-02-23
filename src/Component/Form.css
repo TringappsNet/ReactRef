@@ -1,0 +1,89 @@
+.main {
+    max-width: 900px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+    width: 500px;
+    height:600px;
+    /* margin: 20% auto; */
+    margin-left:500px;
+    flex-wrap: wrap;
+  
+  }
+  
+  form{
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif; 
+    /* background-color: #45a049; */
+    margin-left: 35px;
+    flex-wrap: wrap;
+  }
+  
+  div {
+    margin-bottom: 15px;
+    display: flex; 
+    align-items: center; 
+  }
+  
+  label {
+    width: 100px; 
+    margin-right: 10px;
+    font-weight: bold; 
+    /* margin-left:10px; */
+    /* background-color: red; */
+  }
+  
+  input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none; 
+  }
+  
+  .butn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 70%;
+    padding: 10px; 
+    margin-left: 50px;
+  
+  
+  }
+  
+  .butn:hover {
+    background-color: #13eb3a;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    font-style: italic; 
+    margin-left: 108px;
+  }
+  .form-control{
+    margin-bottom: 50px;
+  }
+  .o-form{
+    display: flex;
+    flex-direction: column;
+  }
+  .render-data{
+    /* background-color: #13eb3a; */
+    margin-left: 450px;
+    margin-top: 100px;
+  }
+  table,tr,td,th{
+    border: 1px solid black;
+
+  }
