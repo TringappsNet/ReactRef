@@ -3,13 +3,13 @@ import './App.css';
 import Form from './components/FormCSV';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-
+import AppRouter from './Router/AppRouter';
 function App() {
   return (
     <Provider store={store}>
 
     <div className="App">
-      <Form/>
+    <AppRouter />
     </div>
      </Provider>
 

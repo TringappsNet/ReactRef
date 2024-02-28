@@ -10,12 +10,11 @@ import readXlsxFile from 'read-excel-file';
 
 function Form() {
   const dispatch = useDispatch();
+  const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   const [retrievedData, setRetrievedData] = useState(null);
-
-
   const [excelData, setExcelData] = useState(null);
-
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -101,7 +100,7 @@ let reader = new FileReader();
 reader.readAsArrayBuffer(selectedFile);
 
 reader.onload = async (e) => {
-  setExcelData(e.target.result);
+  setExcelFile(e.target.result);
 
   const workbook = await readXlsxFile(e.target.result);
   const data = workbook.slice(0, 10);
@@ -149,7 +148,7 @@ dispatch(addExcelData(jsonArray));
       }
     } else {
       setTypeError('Please select only CSV or Excel file types');
-      setExcelData(null);
+      setExcelFile(null);
     }
   } else {
     console.log('Please select your file');
@@ -262,184 +261,122 @@ const submitForm = async (formData,excelData) => {
 
 // -----------------------------------------Retrive fromdatabase---------------------------------------
 
-const fetchDataFromDatabase = async () => {
-  try {
-    const response = await fetch('http://localhost:9090/api/form/get');
-    if (response.ok) {
-      const data = await response.json();
-      setRetrievedData(data);
-      console.log('Data retrieved successfully:', data);
-    } else {
-      console.error('Failed to retrieve data from the database');
-    }
-  } catch (error) {
-    console.error('An error occurred while fetching data:', error);
-  }
-};
-
-
-
-
-
-
-
-
+// const fetchDataFromDatabase = async () => {
+//   try {
+//     const response = await fetch('http://localhost:9090/api/form/get');
+//     if (response.ok) {
+//       const data = await response.json();
+//       setRetrievedData(data);
+//       console.log('Data retrieved successfully:', data);
+//     } else {
+//       console.error('Failed to retrieve data from the database');
+//     }
+//   } catch (error) {
+//     console.error('An error occurred while fetching data:', error);
+//   }
+// };
 
 
 
   return (
     <div className="o-form">
-    <div className="main">
-      <form onSubmit={handleSubmit}>
-       <div>
-          <label htmlFor="fname">First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            id="fname"
-            value={formData.firstName}
-            onChange={handleChange }
-          />
-        </div>
-        <div className="error">{errors.firstName}</div>
-
-        <div>
-          <label htmlFor="lname">Last Name</label>
-          <input
-            type="text"
-            id="lname"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="error">{errors.lastName}</div>
-
-        <div>
-          <label htmlFor="email">Email ID</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter the email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="error">{errors.email}</div>
-
-        <div>
-          <label htmlFor="pass">Password</label>
-          <input
-            type="password"
-            id="pass"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="error">{errors.password}</div>  
-        <label htmlFor="csvin">Upload CSV or Excel File</label>
-         <input type="file" className="form-control" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required onChange={handleFile} />
-
-    
-        
-
-         {/* <button type="submit" className="butn">Submit</button> */}
-         <button type="submit" onClick={addData} className="butn">Submit</button>
-         <button onClick={fetchDataFromDatabase}>Get Data</button>
-
-        </form>
-
-
-
-
-
-
-
-
-    </div>
-
-    <div>
-  {retrievedData && (
-    <ul>
-      {retrievedData.map((item) => (
-        <li key={item.id}>
+      <div className="main">
+        <form onSubmit={handleSubmit}>
           <div>
-            <p>First Name: {item.firstName}</p> 
-            <p>Last Name: {item.lastName}</p>
-            <p>Email: {item.email}</p>
-            <p>Password: {item.password}</p>
-            
-            {item.excelData && item.excelData.length > 0 && (
-              <div>
-                <p>Excel Data:</p>
-                <table>
-                  <thead>
-                    <tr>
-                      {Object.keys(item.excelData[0]).map((key) => (
-                        <th key={key}>{key}</th>
+              <label htmlFor="fname">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                id="fname"
+                value={formData.firstName}
+                onChange={handleChange }
+              />
+            </div>
+            <div className="error">{errors.firstName}</div>
+
+            <div>
+              <label htmlFor="lname">Last Name</label>
+              <input
+                type="text"
+                id="lname"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="error">{errors.lastName}</div>
+
+            <div>
+              <label htmlFor="email">Email ID</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter the email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="error">{errors.email}</div>
+
+            <div>
+              <label htmlFor="pass">Password</label>
+              <input
+                type="password"
+                id="pass"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="error">{errors.password}</div>  
+            <label htmlFor="csvin">Upload CSV or Excel File</label>
+            <input type="file" className="form-control" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required onChange={handleFile} />
+
+            <button type="submit" onClick={addData} className="butn">Submit</button>
+
+            {/* <button onClick={() => { fetchDataFromDatabase()}}>Get Data</button>  */}
+        </form>
+      </div>
+
+      <div className="render-data">
+      {typeError&&(
+            <div className="alert alert-danger" role="alert">{typeError}</div>
+          )}
+
+        <div className="viewer">
+          {excelData && Array.isArray(excelData)?(
+            <div className="table-responsive">
+              <table className="table">
+
+                <thead>
+                  <tr>
+                    {Object.keys(excelData[0]).map((key)=>(
+                      <th key={key}>{key}</th>
+                    ))}
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {excelData.map((individualExcelData, index)=>(
+                    <tr key={index}>
+                      {Object.keys(individualExcelData).map((key)=>(
+                        <td key={key}>{individualExcelData[key]}</td>
                       ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {item.excelData.map((row, rowIndex) => (
-                      <tr key={rowIndex}>
-                        {Object.values(row).map((value, colIndex) => (
-                          <td key={colIndex}>{value}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
-
-
-    <div className="render-data">
-    {typeError&&(
-          <div className="alert alert-danger" role="alert">{typeError}</div>
-        )}
-
-<div className="viewer">
-        {excelData && Array.isArray(excelData)?(
-          <div className="table-responsive">
-            <table className="table">
-
-              <thead>
-                <tr>
-                  {Object.keys(excelData[0]).map((key)=>(
-                    <th key={key}>{key}</th>
+                    </tr>  
                   ))}
-                </tr>
-              </thead>
+                </tbody>
 
-              <tbody>
-                {excelData.map((individualExcelData, index)=>(
-                  <tr key={index}>
-                    {Object.keys(individualExcelData).map((key)=>(
-                      <td key={key}>{individualExcelData[key]}</td>
-                    ))}
-                  </tr>  
-                ))}
-              </tbody>
+              </table>
+            </div>
+          ):(
+            <div>No File is uploaded yet!</div>
+          )}
+        </div>   
 
-            </table>
-          </div>
-        ):(
-          <div>No File is uploaded yet!</div>
-        )}
-      </div>   
-
+      </div>
     </div>
-    </div>
+    
   );
-}
-
+        }
 export default Form;
