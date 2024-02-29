@@ -12,9 +12,9 @@ function Form() {
   const dispatch = useDispatch();
   const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
-  const [retrievedData, setRetrievedData] = useState(null);
+  // const [retrievedData, setRetrievedData] = useState(null);
   const [excelData, setExcelData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -96,6 +96,8 @@ const handleFile = async (e) => {
 
 
         // Handle Excel file
+
+        
 let reader = new FileReader();
 reader.readAsArrayBuffer(selectedFile);
 
@@ -103,7 +105,7 @@ reader.onload = async (e) => {
   setExcelFile(e.target.result);
 
   const workbook = await readXlsxFile(e.target.result);
-  const data = workbook.slice(0, 10);
+  const data = workbook;
 
 
 // Extract headers (assuming the first row contains headers)
@@ -116,10 +118,13 @@ const dataArrayWithoutHeaders = data.slice(1);
 const jsonArray = dataArrayWithoutHeaders.map((row) => {
   const obj = {};
   headers.forEach((header, index) => {
-    obj[header] = row[index];
+    obj[header] = typeof header === 'string' && header.toLowerCase().includes('date')
+    ? row[index].toLocaleString() // Convert Date to string
+    : row[index];
   });
   return obj;
 });
+
 // ---------------------Data will change into  Json format and store it in local storage-------------------------
 
 console.log("Array of objects",jsonArray);
@@ -207,7 +212,6 @@ dispatch(addExcelData(jsonArray));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // addData(); 
     console.log("Call addData to dispatch both form and Excel data");
 
     await submitForm(formData,excelData);
@@ -259,24 +263,12 @@ const submitForm = async (formData,excelData) => {
   }
 };
 
-// -----------------------------------------Retrive fromdatabase---------------------------------------
-
-// const fetchDataFromDatabase = async () => {
-//   try {
-//     const response = await fetch('http://localhost:9090/api/form/get');
-//     if (response.ok) {
-//       const data = await response.json();
-//       setRetrievedData(data);
-//       console.log('Data retrieved successfully:', data);
-//     } else {
-//       console.error('Failed to retrieve data from the database');
-//     }
-//   } catch (error) {
-//     console.error('An error occurred while fetching data:', error);
-//   }
-// };
 
 
+function formatDate(date) {
+  const options = { month: 'short', day: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
+}
 
   return (
     <div className="o-form">
@@ -329,9 +321,21 @@ const submitForm = async (formData,excelData) => {
                 onChange={handleChange}
               />
             </div>
-            <div className="error">{errors.password}</div>  
-            <label htmlFor="csvin">Upload CSV or Excel File</label>
-            <input type="file" className="form-control" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required onChange={handleFile} />
+            <div className="error">{errors.password}</div> 
+            
+            <div className="file-input-wrapper">
+  <label className="file-input-label" htmlFor="fileInput">
+    Upload CSV or Excel File
+  </label>
+  <input
+    id="fileInput"
+    type="file"
+    className="form-control"
+    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+    required
+    onChange={handleFile}
+  />
+</div>
 
             <button type="submit" onClick={addData} className="butn">Submit</button>
 
@@ -345,33 +349,40 @@ const submitForm = async (formData,excelData) => {
           )}
 
         <div className="viewer">
-          {excelData && Array.isArray(excelData)?(
-            <div className="table-responsive">
-              <table className="table">
+        {excelData && Array.isArray(excelData) ? (
+  <div className="table-responsive">
+    <table className="table">
+      <thead>
+        <tr>
+          {Object.keys(excelData[0]).map((key) => (
+           <th key={key}>
+           {key.toLowerCase().includes('date') ? 'Date' : key}
+         </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {excelData.map((individualExcelData, index) => (
+          <tr key={index}>
+            {Object.keys(individualExcelData).map((key) => (
+               <td key={key}>
+               {key.toLowerCase().includes('date') &&
+               key.toLowerCase().includes('jan 23')
+                 ? formatDate(new Date(individualExcelData[key]))
+                 : key.toLowerCase().includes('date')
+                 ? '' 
+                 : individualExcelData[key]}
+             </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <div>No File is uploaded yet!</div>
+)}
 
-                <thead>
-                  <tr>
-                    {Object.keys(excelData[0]).map((key)=>(
-                      <th key={key}>{key}</th>
-                    ))}
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {excelData.map((individualExcelData, index)=>(
-                    <tr key={index}>
-                      {Object.keys(individualExcelData).map((key)=>(
-                        <td key={key}>{individualExcelData[key]}</td>
-                      ))}
-                    </tr>  
-                  ))}
-                </tbody>
-
-              </table>
-            </div>
-          ):(
-            <div>No File is uploaded yet!</div>
-          )}
         </div>   
 
       </div>

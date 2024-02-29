@@ -1,88 +1,154 @@
 .main {
-  max-width: 900px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 100px;
-  width: 500px;
-  height:600px;
-  /* margin: 20% auto; */
-  margin-left:500px;
-  flex-wrap: wrap;
+    max-width: 900px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 150px;
+    width: 500px;
+    height:600px;
+    /* margin: 20% auto; */
+    margin-left:200px;
+    flex-wrap: wrap;
+    padding-top: 70px;
+    background-color: rgb(215, 215, 208);
+  border: none;
+  }
+  
+  form{
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif; 
+    /* background-color: #45a049; */
+    /* margin-left: 35px; */
+    flex-wrap: wrap;
+    margin: 50px;
+  }
+  
+  div {
+    margin-bottom: 15px;
+    align-items: center; 
+  }
+  
+  label {
+    width: 100px; 
+    margin-right: 10px;
+    font-weight: bold; 
+    /* margin-left:10px; */
+    /* background-color: red; */
+  }
+  
+  input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none; 
+    border: none;
+  }
+  
+  .butn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 70%;
+    padding: 10px; 
+    margin-left: 70px;
+  
+  
+  }
+  
+  .butn:hover {
+    background-color: #13eb3a;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    font-style: italic; 
+    margin-left: 108px;
+  }
+  .form-control{
+    margin-bottom: 50px;
+    width:  210px;
+    margin-left: 125px;
+    border: none;
+    }
+  .o-form{
+    display: flex;
+    flex-direction: column;
+  }
+  .render-data{
+    /* background-color: #13eb3a; */
+    margin-left: 450px;
+    margin-top: 100px;
+  }
+  table,tr,td,th{
+    border: 1px solid black;
 
+  }
+  .csvfile{
+    display: flex;
+    flex-direction: row;
+  }
+  /* .form-control1{
+    margin-left:50px;
+
+  }
+  .form-control{
+    margin-right:
+
+  } */
+  
+
+  /* Add these styles to your existing CSS */
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  font-style: italic;
 }
 
-form{
-  display: flex;
-  flex-direction: column;
-  font-family: sans-serif; 
-  /* background-color: #45a049; */
-  margin-left: 35px;
-  flex-wrap: wrap;
+.form-control {
+  margin-bottom: 20px;
 }
 
-div {
-  margin-bottom: 15px;
-  align-items: center; 
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 300px;
+  height: 100px;
+  margin-left: 60px;
+  margin-top: 20px;
 }
 
-label {
-  width: 100px; 
-  margin-right: 10px;
-  font-weight: bold; 
-  /* margin-left:10px; */
-  /* background-color: red; */
-}
-
-input {
-  flex: 1;
-  padding: 10px;
+.file-input-wrapper input[type="file"] {
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  outline: none; 
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 
-.butn {
-  background-color: #4caf50;
+.file-input-label {
+  background-color: #93938d;
   color: white;
   padding: 10px 15px;
   font-size: 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  width: 70%;
-  padding: 10px; 
-  margin-left: 50px;
-
-
+  
 }
 
-.butn:hover {
+.file-input-label:hover {
   background-color: #13eb3a;
-}
-
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
-  font-style: italic; 
-  margin-left: 108px;
-}
-.form-control{
-  margin-bottom: 50px;
-}
-.o-form{
-  display: flex;
-  flex-direction: column;
-}
-.render-data{
-  /* background-color: #13eb3a; */
-  margin-left: 450px;
-  margin-top: 100px;
-}
-table,tr,td,th{
-  border: 1px solid black;
-
 }
