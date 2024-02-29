@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import './FormCSV.css';
-// import axios from "axios";
-// import * as XLSX from 'xlsx';
+
 import { useDispatch } from "react-redux";
 import { addFormData,addExcelData } from "../redux/slice";
 import readXlsxFile from 'read-excel-file';
@@ -10,7 +9,6 @@ import readXlsxFile from 'read-excel-file';
 
 function Form() {
   const dispatch = useDispatch();
-  const [excelFile, setExcelFile] = useState(null);
   const [typeError, setTypeError] = useState(null);
   // const [retrievedData, setRetrievedData] = useState(null);
   const [excelData, setExcelData] = useState(null);
@@ -37,29 +35,18 @@ function Form() {
       dispatch(addFormData(formData));
       console.log("Form data dispatched");
   
-      // // Clear form data if needed
-      // setFormData({
-      //   firstName: "",
-      //   lastName: "",
-      //   email: "",
-      //   password: "",
-      // });
+  
     } else {
       console.log("Failed to dispatch form data");
     }
-    // console.log(excelData);
 
     if (excelData) {
       dispatch(addExcelData(excelData));
       console.log("Excel data dispatched");
-      
-  
-      // setExcelData(null);
-      // dispatch(addExcelData(excelData));
+
 
     } else {
       console.log("Failed to dispatch Excel data");
-      // console.log(excelData);
     }
   }
   catch (error) {
@@ -102,24 +89,18 @@ let reader = new FileReader();
 reader.readAsArrayBuffer(selectedFile);
 
 reader.onload = async (e) => {
-  setExcelFile(e.target.result);
+  setExcelData(e.target.result);
 
   const workbook = await readXlsxFile(e.target.result);
   const data = workbook;
 
-
-// Extract headers (assuming the first row contains headers)
 const headers = data[0];
-
-// Remove the first row (headers) from the data array
 const dataArrayWithoutHeaders = data.slice(1);
-
-// Convert array of arrays to array of objects
 const jsonArray = dataArrayWithoutHeaders.map((row) => {
   const obj = {};
   headers.forEach((header, index) => {
     obj[header] = typeof header === 'string' && header.toLowerCase().includes('date')
-    ? row[index].toLocaleString() // Convert Date to string
+    ? row[index].toLocaleString() 
     : row[index];
   });
   return obj;
@@ -136,24 +117,13 @@ setExcelData(jsonArray);
 dispatch(addExcelData(jsonArray));
 
 
-  // // Store the JSON string directly in local storage
-  // localStorage.setItem('excelData', JSON.stringify(data));
-
-  // console.log("Data from Excel", data);
-  // // console.log("Data Format:", typeof data);  // It will print "object"
-  // console.log("Successfully Data stored in Local Storage");
-
-  // const storedData = localStorage.getItem('excelData');
-  // const dataArray = storedData ? JSON.parse(storedData) : [];
-  // console.log("Data in Array Format", dataArray); 
-  // // console.log("Data Format:", typeof dataArray);  // It will print "object"
 
 };
 
       }
     } else {
       setTypeError('Please select only CSV or Excel file types');
-      setExcelFile(null);
+      setExcelData(null);
     }
   } else {
     console.log('Please select your file');
@@ -234,9 +204,24 @@ dispatch(addExcelData(jsonArray));
   // Example using fetch
 const submitForm = async (formData,excelData) => {
   try {
+
+       // Format excelData before sending to the server
+       const formattedExcelData = excelData.map((individualExcelData) => {
+        const formattedData = {};
+        Object.keys(individualExcelData).forEach((key) => {
+          formattedData[key] = key.toLowerCase().includes('date') &&
+            key.toLowerCase().includes('jan 23')
+            ? formatDate(new Date(individualExcelData[key]))
+            : key.toLowerCase().includes('date')
+            ? ''
+            : individualExcelData[key];
+        });
+        return formattedData;
+      });
+  
     const requestBody = { 
       emp: formData,
-      excelData: excelData,
+      excelData: formattedExcelData,
       
     };
     console.log('Request Body:', JSON.stringify(requestBody)); 
@@ -252,10 +237,9 @@ const submitForm = async (formData,excelData) => {
       if (response.ok) {
           console.log('Form and Excel data submitted successfully');
           console.log(formData);
-          console.log(excelData);
-
+          console.log(formattedExcelData);
       } else {
-        console.log("Server side excel data : ",excelData);
+        console.log("Server side excel data : ",formattedExcelData);
           console.error('Failed to submit form data');
       }
   } catch (error) {
@@ -269,6 +253,11 @@ function formatDate(date) {
   const options = { month: 'short', day: 'numeric' };
   return date.toLocaleDateString(undefined, options);
 }
+function formatDateHeading(header) {
+  const dateParts = header.match(/\b(\w{3} \d{2})\b/);
+  return dateParts ? dateParts[0] : header;
+}
+
 
   return (
     <div className="o-form">
@@ -322,7 +311,7 @@ function formatDate(date) {
               />
             </div>
             <div className="error">{errors.password}</div> 
-            
+
             <div className="file-input-wrapper">
   <label className="file-input-label" htmlFor="fileInput">
     Upload CSV or Excel File
@@ -339,7 +328,7 @@ function formatDate(date) {
 
             <button type="submit" onClick={addData} className="butn">Submit</button>
 
-            {/* <button onClick={() => { fetchDataFromDatabase()}}>Get Data</button>  */}
+           
         </form>
       </div>
 
@@ -352,15 +341,17 @@ function formatDate(date) {
         {excelData && Array.isArray(excelData) ? (
   <div className="table-responsive">
     <table className="table">
-      <thead>
-        <tr>
-          {Object.keys(excelData[0]).map((key) => (
-           <th key={key}>
-           {key.toLowerCase().includes('date') ? 'Date' : key}
-         </th>
-          ))}
-        </tr>
-      </thead>
+    <thead>
+  <tr>
+    {Object.keys(excelData[0]).map((key) => (
+      <th key={key}>
+        {formatDateHeading(key)}
+      </th>
+    ))}
+  </tr>
+</thead>
+
+
       <tbody>
         {excelData.map((individualExcelData, index) => (
           <tr key={index}>
