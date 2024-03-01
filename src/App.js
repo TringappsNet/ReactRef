@@ -7,7 +7,8 @@ function App() {
     <Provider store={store}>
 
     <div className="App">
-    <AppRouter />
+      
+      <AppRouter />
     </div>
      </Provider>
 

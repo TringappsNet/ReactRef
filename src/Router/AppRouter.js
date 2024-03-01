@@ -4,6 +4,7 @@ import './AppRouter.css';
 import Form from "../components/FormCSV";
 import List from "../components/List";
 
+
 const AppRouter = () => {
   return (
     <Router>
@@ -26,9 +27,9 @@ const AppRouter = () => {
       </nav>
 
       <Routes>
-        <Route path="/form" element={<Form />} />
+        <Route path="/" exact element={<Form />} />
         <Route path="/list" element={<List />} />
-      </Routes>
+      </Routes> 
     </Router>
   );
 };
