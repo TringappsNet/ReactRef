@@ -12,12 +12,12 @@ const AppRouter = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <NavLink to="/form" className="nav-link" activeClassName="active">
+              <NavLink to="/form" className="nav-link" activeclassname="active">
                 Form
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/list" className="nav-link" activeClassName="active">
+              <NavLink to="/list" className="nav-link" activeclassname="active">
                 List
               </NavLink>
             </li>

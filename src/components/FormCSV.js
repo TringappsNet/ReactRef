@@ -8,7 +8,6 @@ function Form() {
   const dispatch = useDispatch();
   const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
   const [formData, setFormData] = useState({
@@ -179,7 +178,7 @@ function Form() {
     setErrors(newErrors);
  const isValidForm = Object.values(newErrors).every((error) => error === "");
 
- setSubmitDisabled(!isValidForm || !valid);
+ setSubmitDisabled(!isValidForm );
  
     return valid;
   };
