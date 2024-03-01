@@ -1,28 +1,36 @@
-// AppRouter.jsx
 import React from "react";
-import { BrowserRouter as Router, Route,NavLink, Routes } from 'react-router-dom';
-import './AppRouter.css'
+import { BrowserRouter as Router, Route, NavLink, Routes } from 'react-router-dom';
+import './AppRouter.css';
 import Form from "../components/FormCSV";
 import List from "../components/List";
+
 const AppRouter = () => {
   return (
-      <Router>
-          <nav className="nav-header">
-            <NavLink to="/form" activeClassName="active">
-              Form
-            </NavLink>
-            <NavLink to="/list" activeClassName="active">
-              List
-            </NavLink>
-          </nav>
+    <Router>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div className="navbar-brand">WEBPORTAL</div>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <NavLink to="/form" className="nav-link" activeClassName="active">
+                Form
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/list" className="nav-link" activeClassName="active">
+                List
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      </nav>
 
-          <Routes>
-          <Route path="/form" element={<Form />} />
-            <Route path="/list" element={<List />} />
-          </Routes>
-      </Router>    
+      <Routes>
+        <Route path="/form" element={<Form />} />
+        <Route path="/list" element={<List />} />
+      </Routes>
+    </Router>
   );
 };
-
 
 export default AppRouter;
