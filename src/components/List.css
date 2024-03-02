@@ -1,41 +1,4 @@
-  /* body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      
-    } */
-/* .nav-header {
-    display: flex;
-    justify-content: space-around;
-    background-color: rgb(160, 160, 160);
-    padding: 1rem;
-    width: 100%;
-    position:sticky;
-    top: 0;
-    z-index: 1;
-  }
-  .nav-header a {
-    text-decoration: none;
-    color: #3475d6;
-    padding: 0.5rem 1rem;
-      width: 100px;
-      text-align: center;
-  }
-  
-  .nav-header a.active {
-    background-color: #ddd;
-    border-radius: 4px;
-  }
-   */
-    /* .container {
-      margin-top: 1rem; 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-    } */
-  
+
     .row {
         width: 100%;
         box-sizing: border-box;
@@ -45,139 +8,24 @@
         position: relative; 
         z-index: 0;
       }
-  /* .col1{
-    background-color: rgb(234, 239, 250);
-    width: 400px;
-  
-  } */
-  /* .col{
-    margin-left: 20px;
-   } */
-  
-   /* .mt{
-    width: 1600px;
-   } */
-  /* .text-center {
-    text-align: center;
-  } */
-  
-  /* .mb-3 {
-    margin-bottom: 1rem;
-  } */
-  
-  /* .selected {
-    border: 2px solid blue;
-  }
-   */
-  /* .border {
-    border: 1px solid #bdd6f4;
-    padding: 1rem;
-    width: 200px;
-    text-align: center;
-    height: 30px;
-    margin-left: 20px;
-   border: none;
-  
-  } */
-  
-  /* .col-md-6 .mt-4 {
-    margin-top: 1.5rem;
-    background-color: aquamarine;
-    overflow: auto;
-    max-height: 400px; 
-  } */
-/*   
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    overflow-y: auto;
-  
-  }
-  .excel-container {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  
-  .table th, */
-  /* .table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    transition: background-color 0.3s ease-in-out;
-  } */
-  /* table tr:hover {
-    background-color: #f5f5f5; 
-  }
-  
-  .table th:hover,
-  .table td:hover {
-    background-color: #e0e0e0; 
-  }
-  
-  .thead-light {
-    background-color: #f2f2f2;
-  }
-  
-  .col-md-6 {
-    order: -1;
-  }
-   */
+      .excel-container .editing {
+        border: none !important;
+        outline: none;
+      }
+      
+      .excel-container td:focus {
+        outline: none;
+      }
+      /* .excel-container .editing {
+        background-color: red !important;
+        border: none;
+      }
+      
+      .excel-container td:focus {
+        background-color: green !important;
+      }
+       */
+      
   
   
   
-  
-  /* -----------------nutton css animation--------------- */
-  
-  
-  /* .selected {
-    border: 1px solid #9a9999;
-    width: 200px;
-    text-align: center;
-    height: 60px;
-    margin-left: 20px;
-    transition: background-color 0.3s ease-in-out; 
-    border:none;
-    padding-left: 10px;
-  }
-   */
-  /* .border:hover {
-    background-color: rgb(231, 235, 250);
-    width: 75%;
-    margin-left: 1px;
-    border-right-style:solid
-    
-    
-    
-  } */
-  /* .col {
-    position: sticky;
-    top: 0;
-    background-color: #f8f9fa;
-    z-index: 1;
-
-  } */
-  /* .editbtn{
-    background-color: #46f0b2; 
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;  
-    border-radius: 7px;
-    display: flex;
-    
-} */
-    /* .delbtn{
-        background-color: rgb(250, 85, 85); 
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 7px;
-    } */

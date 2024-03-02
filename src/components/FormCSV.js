@@ -8,6 +8,7 @@ function Form() {
   const dispatch = useDispatch();
   const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
   const [formData, setFormData] = useState({
@@ -178,7 +179,7 @@ function Form() {
     setErrors(newErrors);
  const isValidForm = Object.values(newErrors).every((error) => error === "");
 
- setSubmitDisabled(!isValidForm );
+ setSubmitDisabled(!isValidForm || !valid);
  
     return valid;
   };
@@ -263,110 +264,122 @@ function Form() {
   }
 
   return (
-    <div className="container mt-5" >
-      <div className="row justify-content-center">
-
-        <div className="col-md-4 border p-4 mt-5  rounded shadow bg-white">
-        
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="fname" className="form-label">
-                First Name
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
-                id="fname"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-              <div className="invalid-feedback">{errors.firstName}</div>
+    <div className="container mt-5">
+  <div className="row justify-content-center">
+    <div className="col-md-4 border p-4 mt-5 rounded shadow bg-white">
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3 row">
+          <label htmlFor="fname" className="form-label col-2   text-left mt-2 ">
+            Fname
+          </label>
+          <div className="col-12">
+            <input
+              type="text"
+              className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
+              id="fname"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+            <div className={`invalid-feedback col-6 text-right mt-2  ${errors.firstName ? "d-block" : "d-none"}`} style={{paddingLeft:'220px'}} >
+              {errors.firstName}
             </div>
-
-            <div className="mb-3">
-              <label htmlFor="lname" className="form-label">
-                Last Name
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
-                id="lname"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-              <div className="invalid-feedback">{errors.lastName}</div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email ID
-              </label>
-              <input
-                type="email"
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                id="email"
-                name="email"
-                placeholder="Enter the email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              <div className="invalid-feedback">{errors.email}</div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="pass" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                id="pass"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <div className="invalid-feedback">{errors.password}</div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="fileInput" className="form-label">
-                Upload CSV or Excel File
-              </label>
-              <input
-                id="fileInput"
-                type="file"
-                className={`form-control ${typeError ? "is-invalid" : ""}`}
-                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                required
-                onChange={handleFile}
-              />
-              <div className="invalid-feedback">{typeError}</div>
-            </div>
-
-            <button
-             type="submit"
-             onClick={addData}
-             className="btn btn-primary"
-             disabled={isSubmitDisabled}
-             >
-              Submit
-            </button>
-          </form>
+          </div>
         </div>
-      </div>
-     {showSuccessPopup && (
-  <div className="row mt-3 justify-content-center align-items-center">
-    <div className="col-md-4">
-      <div className="alert alert-success text-center" role="alert">
-        Successfully submitted! Redirecting...
-      </div>
+
+        <div className="mb-3 row">
+          <label htmlFor="lname" className="form-label col-2 text-left mt-2">
+            Lname
+          </label>
+          <div className="col-12">
+            <input
+              type="text"
+              className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
+              id="lname"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+            <div className="invalid-feedback col-6 text-right mt-2" style={{paddingLeft:'220px'}}>{errors.lastName}</div>
+          </div>
+        </div>
+
+        <div className="mb-3 row">
+          <label htmlFor="email" className="form-label col-2 text-left mt-2">
+            Email 
+          </label>
+          <div className="col-12">
+            <input
+              type="email"
+              className={`form-control ${errors.email ? "is-invalid" : ""}`}
+              id="email"
+              name="email"
+              placeholder="Enter the email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <div className="invalid-feedback col-6 text-right mt-2"style={{paddingLeft:'240px'}}>{errors.email}</div>
+          </div>
+        </div>
+
+        <div className="mb-3 row">
+          <label htmlFor="pass" className="form-label col-3 text-left mt-2">
+            Password
+          </label>
+          <div className="col-12">
+            <input
+              type="password"
+              className={`form-control ${errors.password ? "is-invalid" : ""}`}
+              id="pass"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <div className="invalid-feedback col-6 text-right mt-2" style={{paddingLeft:'110px'}}>{errors.password}</div>
+          </div>
+        </div>
+
+        <div className="mb-3 row">
+          <label htmlFor="fileInput" className="form-label col-2 text-left mt-2">
+            File
+          </label>
+          <div className="col-12">
+            <input
+              id="fileInput"
+              type="file"
+              className={`form-control ${typeError ? "is-invalid" : ""}`}
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              required
+              onChange={handleFile}
+            />
+            <div className="invalid-feedback col-6 text-right mt-2 " style={{paddingLeft:'160px'}}>{typeError}</div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          onClick={addData}
+          className="btn btn-primary"
+          disabled={isSubmitDisabled}
+        >
+          Submit
+        </button>
+      </form>
     </div>
   </div>
-)}
+  {showSuccessPopup && (
+    <div className="row mt-3 justify-content-center align-items-center">
+      <div className="col-md-4">
+        <div className="alert alert-success text-center" role="alert">
+          Successfully submitted! Redirecting...
+        </div>
+      </div>
+    </div>
+  )}
 
-      <div className="row mt-4">
+
+
+      {/* <div className="row mt-4">
         <div className="col-md-6">
           {excelData && Array.isArray(excelData) ? (
             <div className="table-responsive">
@@ -401,7 +414,7 @@ function Form() {
             <div>No File is uploaded yet!</div>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

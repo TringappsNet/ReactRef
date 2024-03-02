@@ -8,6 +8,7 @@ function List() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState([]);
   const [deletedItems, setDeletedItems] = useState([]);
+  const [editingCell, setEditingCell] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,18 +79,45 @@ function List() {
         }
       }
       setIsEditing(!isEditing);
+      setEditingCell(null);
+
     } catch (error) {
       console.error("An error occurred while saving changes:", error);
     }
   };
 
-  const handleDeleteRow = (rowIndex) => {
+  const handleDeleteRow = async (rowIndex) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this row?");
 
     if (isConfirmed) {
-      setDeletedItems((prevDeletedItems) => [...prevDeletedItems, rowIndex]);
+        try {
+            const response = await fetch(`http://localhost:9090/api/form/delete/${retrievedData[selectedItem].id}/${rowIndex}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                console.log("Row deleted successfully");
+                setRetrievedData((prevData) => {
+                  const newData = [...prevData];
+                  const selectedUserData = newData[selectedItem];
+                  if (selectedUserData.excelData) {
+                      selectedUserData.excelData.splice(rowIndex, 1);
+                  }
+                  return newData;
+              });
+            } else {
+                console.error("Failed to delete row");
+            }
+        } catch (error) {
+            console.error("An error occurred while deleting row:", error);
+        }
     }
-  };
+};
+
+
+
+
+
 
   const handleInputChange = (e, rowIndex, colIndex) => {
     try {
@@ -106,10 +134,22 @@ function List() {
     }
   };
 
+
+
+  const handleDoubleClick = (rowIndex, colIndex) => {
+    setIsEditing(true);
+    setEditingCell({ rowIndex, colIndex });
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleEditSave();
+    }
+  };
   return (
     <div className="container-fluid">
       <div className="row">
-        <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <nav id="sidebarMenu" className="col-2 d-md-block bg-light mt-5 p-0 pt-0 sidebar">
           <div className="position-sticky">
             <div className="list-group list-group-flush mx-3 mt-4">
               {retrievedData && retrievedData.map((data, index) => (
@@ -121,19 +161,19 @@ function List() {
                   onClick={() => handleNameClick(index)}
                 >
                   <i className="fas fa-user fa-fw me-3"></i>
-                  <span>{data.firstName}</span>
+                  <span>{data.firstName}{data.lastName}</span>
                 </a>
               ))}
             </div>
           </div>
         </nav>
 
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
-          <div className="mt-4">
+        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
+          <div className="mt-5">
             {/* <h2>EXCEL DATAS</h2> */}
-            <button className={`btn ${isEditing ? 'btn-success' : 'btn-primary'} mt-5 mb-5 `} onClick={handleEditSave}>
+            {/* <button className={`btn ${isEditing ? 'btn-success' : 'btn-primary'} mt-5 mb-5 `} onClick={handleEditSave}>
               {isEditing ? 'Save Changes' : 'Edit'}
-            </button>
+            </button> */}
 
             {selectedItem !== null && retrievedData ? (
               <div className="sticky-top">
@@ -166,16 +206,25 @@ function List() {
             {excelData.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {Object.values(row).map((value, colIndex) => (
-                  <td key={colIndex}>
-                    {isEditing ? (
+                  <td
+                    key={colIndex}
+                    onDoubleClick={() => handleDoubleClick(rowIndex, colIndex)}
+                    onKeyDown={handleKeyDown}
+                    tabIndex="0"
+
+                    className={(editingCell && editingCell.rowIndex === rowIndex && editingCell.colIndex === colIndex) ? 'editing' : ''}
+                  >
+                    {isEditing && editingCell && editingCell.rowIndex === rowIndex && editingCell.colIndex === colIndex ? (
                       <input
                         type="text"
                         value={value}
                         onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                      />
+                        autoFocus
+                        style={{ border: 'none', outline: 'none' }}
+                        />
                     ) : (
                       value instanceof Date ? value.toLocaleDateString() : value
-                    )}
+                    )}      
                   </td>
                 ))}
                 <td>
@@ -190,6 +239,7 @@ function List() {
       </div>
     );
   }
+  
 }
 
 export default List;
