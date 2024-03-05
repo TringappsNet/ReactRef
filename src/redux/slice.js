@@ -5,7 +5,8 @@
       formData: {},
       excelData: [],
       retrievedData: null,
-
+      registeredEmails: [], // Add this line
+      registeredFirstNames: [], // Add this line
     };
 
     const formSlice = createSlice({
@@ -14,6 +15,8 @@
       reducers: {
         addFormData: (state, action) => {
           state.formData = action.payload;
+          state.registeredEmails.push(action.payload.email); // Add this line
+          state.registeredFirstNames.push(action.payload.firstName); // Add this line 
         },
         addExcelData: (state, action) => {
           state.excelData = action.payload;

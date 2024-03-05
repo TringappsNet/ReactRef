@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector  } from "react-redux";
 import { addFormData, addExcelData } from "../redux/slice";
 import readXlsxFile from "read-excel-file";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,9 +8,12 @@ function Form() {
   const dispatch = useDispatch();
   const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+const [focusedField, setFocusedField] = useState(null);
 
   const [typeError, setTypeError] = useState(null);
   const [excelData, setExcelData] = useState(null);
+  const registeredEmails = useSelector((state) => state.form.registeredEmails); 
+  const registeredFirstNames = useSelector((state) => state.form.registeredFirstNames); 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -126,63 +129,96 @@ function Form() {
       ...prevData,
       [name]: value,
     }));
+  
+    setFocusedField(name); 
+    validateForm();
+    const isEmailAlreadyRegistered = registeredEmails.includes(formData.email);
+    const isFirstNameAlreadyRegistered = registeredFirstNames.includes(formData.firstName);
+    
+    if (isEmailAlreadyRegistered) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Email is already registered",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "",
+      }));
+    }
 
-    console.log("handlechange data stored");
-    validateForm(); 
-
+    if (isFirstNameAlreadyRegistered) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        firstName: "First name is already registered",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        firstName: "",
+      }));
+    }
   };
 
+
+  
   const validateForm = () => {
     let valid = true;
     const newErrors = { ...errors };
-
+  
     const nameRegex = /^[a-zA-Z]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+  
     if (!formData.firstName.trim().match(nameRegex)) {
       newErrors.firstName = "First name is not valid";
       valid = false;
     } else {
       newErrors.firstName = "";
     }
-
+  
     if (!formData.lastName.trim().match(nameRegex)) {
       newErrors.lastName = "Last name is not valid";
       valid = false;
     } else {
       newErrors.lastName = "";
     }
-
+  
     if (!formData.email.trim().match(emailRegex)) {
       newErrors.email = "Email is not valid";
       valid = false;
     } else {
       newErrors.email = "";
     }
-
+  
     if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
       valid = false;
     } else {
       newErrors.password = "";
     }
-
-
-    // Check if Excel data is present
-  if (!excelData) {
-    setTypeError("Please select a CSV or Excel file");
-    valid = false;
-  } else {
-    setTypeError(null);
-  }
-
+  
+    Object.keys(newErrors).forEach((field) => {
+      if (field !== focusedField) {
+        newErrors[field] = "";
+      }
+    });
+  
+    if (!excelData) {
+      setTypeError("Please select a CSV or Excel file");
+      valid = false;
+    } else {
+      setTypeError(null);
+    }
+  
     setErrors(newErrors);
- const isValidForm = Object.values(newErrors).every((error) => error === "");
-
- setSubmitDisabled(!isValidForm || !valid);
- 
+  
+    const isValidForm = Object.values(newErrors).every((error) => error === "");
+  
+    setSubmitDisabled(!isValidForm || !valid);
+  
     return valid;
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -223,28 +259,35 @@ function Form() {
             : key.toLowerCase().includes("date")
             ? ""
             : individualExcelData[key];
+            
         });
+
+        
         return formattedData;
+        
       });
 
       const requestBody = {
         emp: formData,
         excelData: formattedExcelData,
       };
-      console.log("Request Body:", JSON.stringify(requestBody));
 
-      const response = await fetch("http://localhost:9090/api/form/create", {
+      // console.log("Request Body:", JSON.stringify(requestBody));
+
+      const response = await fetch("http://localhost:8080/api/employees/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
+
       });
 
       if (response.ok) {
         console.log("Form and Excel data submitted successfully");
         console.log(formData);
         console.log(formattedExcelData);
+
       } else {
         console.log("Server side excel data : ", formattedExcelData);
         console.error("Failed to submit form data");
@@ -258,10 +301,10 @@ function Form() {
     const options = { month: "short", day: "numeric" };
     return date.toLocaleDateString(undefined, options);
   }
-  function formatDateHeading(header) {
-    const dateParts = header.match(/\b(\w{3} \d{2})\b/);
-    return dateParts ? dateParts[0] : header;
-  }
+  // function formatDateHeading(header) {
+  //   const dateParts = header.match(/\b(\w{3} \d{2})\b/);
+  //   return dateParts ? dateParts[0] : header;
+  // }
 
   return (
     <div className="container mt-5">
@@ -417,6 +460,6 @@ function Form() {
       </div> */}
     </div>
   );
-}
+};
 
 export default Form;

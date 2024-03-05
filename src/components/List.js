@@ -161,15 +161,17 @@ function List() {
                   onClick={() => handleNameClick(index)}
                 >
                   <i className="fas fa-user fa-fw me-3"></i>
-                  <span>{data.firstName}{data.lastName}</span>
+                  <span>{data.firstName + data.lastName}</span>
                 </a>
+                
+                
               ))}
             </div>
           </div>
         </nav>
 
         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-          <div className="mt-5">
+          <div className="mt-5" style={{ fontFamily: 'Your Font Family', fontSize: 'Your Font Size', color: 'Your Font Color' }}>
             {/* <h2>EXCEL DATAS</h2> */}
             {/* <button className={`btn ${isEditing ? 'btn-success' : 'btn-primary'} mt-5 mb-5 `} onClick={handleEditSave}>
               {isEditing ? 'Save Changes' : 'Edit'}
@@ -189,18 +191,22 @@ function List() {
       </div>
     </div>
   );
+  function formatDateHeading(header) {
+    const dateParts = header.match(/\b(\w{3} \d{2})\b/);
+    return dateParts ? dateParts[0] : header;
+  }
 
   function renderExcelData(excelData, isEditing) {
     return (
       <div className="excel-container">
         <table className="table table-bordered table-hover">
           <thead className="thead-light">
-            <tr>
-              {Object.keys(excelData[0]).map((key) => (
-                <th key={key}>{key}</th>
-              ))}
-              <th>Delete</th>
-            </tr>
+          <tr>
+            {Object.keys(excelData[0]).map((key) => (
+              <th key={key}>{formatDateHeading(key)}</th>
+            ))}
+            <th>Delete</th>
+          </tr>
           </thead>
           <tbody>
             {excelData.map((row, rowIndex) => (
@@ -234,6 +240,7 @@ function List() {
                 </td>
               </tr>
             ))}
+            
           </tbody>
         </table>
       </div>
